@@ -71,7 +71,7 @@ local MY_TARGET_MON_MAP_TYPE = {
 	COMPETITION     = -17, -- 竞技
 	GUILD_TERRITORY = -18, -- 帮会领地
 	CAMP            = -19, -- 阵营地图
-	SCHOOL		    = -21, -- 门派地图
+	SCHOOL          = -21, -- 门派地图
 	RECYCLE_BIN     =  -9, -- 回收站
 }
 local MY_TARGET_MON_MAP_TYPE_NAME = {
