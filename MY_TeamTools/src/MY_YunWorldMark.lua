@@ -225,7 +225,8 @@ function D.OpenPanel()
 				key = 'szAuthor',
 				title = _L['Author'],
 				alignHorizontal = 'left',
-				width = 160,
+				width = 200,
+				overflow = 'hidden',
 				render = function(value)
 					return GetFormatText(' ' .. X.ReplaceSensitiveWord(tostring(value or '')), 162, 255, 255, 255)
 				end,
@@ -234,7 +235,7 @@ function D.OpenPanel()
 				key = 'dwUpdateTime',
 				title = _L('Update time'),
 				alignHorizontal = 'left',
-				width = 170,
+				width = 130,
 				render = function(value)
 					return GetFormatText(' ' .. X.ReplaceSensitiveWord(tostring(value or '')), 162, 255, 255, 255)
 				end,
