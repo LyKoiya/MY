@@ -290,6 +290,10 @@ function D.Search(ui, nPage)
 	-- 兼容传 raw 或 wrapper
 	ui = X.UI(ui)
 
+	-- 防止并发搜索回调覆盖新结果
+	D.nSearchToken = (tonumber(D.nSearchToken) or 0) + 1
+	local nToken = D.nSearchToken
+
 	nPage = tonumber(nPage) or 1
 	if nPage < 1 then
 		nPage = 1
@@ -298,6 +302,52 @@ function D.Search(ui, nPage)
 	local szSearch = X.TrimString(ui:Fetch('WndEditBox_Search'):Text() or '')
 	local dwMapID = D.dwMapID or 0
 
+	local aAllList = nil
+	local tFeedRecord = nil
+	local nPending = 0
+	local function fnToRecord(tInfo)
+		if not X.IsTable(tInfo) then
+			return nil
+		end
+		return {
+			id = tInfo.id,
+			key = tInfo.key,
+			szName = tInfo.name,
+			szAuthor = tInfo.author,
+			dwUpdateTime = tInfo.update,
+			szDataURL = tInfo.data_url,
+			szAboutURL = tInfo.about,
+			tRaw = tInfo,
+		}
+	end
+	local function fnFinalize()
+		if nToken ~= D.nSearchToken then
+			return
+		end
+		if nPending > 0 then
+			return
+		end
+
+		local aDataSource = {}
+		local nFeedID = nil
+		if X.IsTable(tFeedRecord) and tFeedRecord.id then
+			nFeedID = tFeedRecord.id
+			table.insert(aDataSource, tFeedRecord)
+		end
+		for _, rec in ipairs(aAllList or {}) do
+			if not (nFeedID and rec and rec.id == nFeedID) then
+				table.insert(aDataSource, rec)
+			end
+		end
+		ui:Fetch('WndTable_List'):DataSource(aDataSource)
+	end
+	local function fnDoneOne()
+		nPending = nPending - 1
+		fnFinalize()
+	end
+
+	-- 1) 排行榜列表
+	nPending = nPending + 1
 	X.Ajax({
 		url = MY_RSS.PULL_BASE_URL .. '/api/addon/common-monitor/subscribe/all',
 		data = {
@@ -310,35 +360,71 @@ function D.Search(ui, nPage)
 			pageSize = 100,
 		},
 		success = function(szHTML)
+			if nToken ~= D.nSearchToken then
+				return
+			end
 			local res = X.DecodeJSON(szHTML)
 			if not X.IsTable(res) or not X.IsTable(res.data) then
 				X.OutputAnnounceMessage(_L['Fetch repo meta list failed.'])
-				ui:Fetch('WndTable_List'):DataSource({})
+				aAllList = {}
+				fnDoneOne()
 				return
 			end
-			local aDataSource = {}
+			local a = {}
 			for _, info in ipairs(res.data) do
-				table.insert(aDataSource, {
-					id = info.id,
-					key = info.key,
-					szName = info.name,
-					szAuthor = info.author,
-					dwUpdateTime = info.update,
-					szDataURL = info.data_url,
-					szAboutURL = info.about,
-					__raw = info,
-				})
+				table.insert(a, fnToRecord(info))
 			end
-			ui:Fetch('WndTable_List'):DataSource(aDataSource)
+			aAllList = a
+			fnDoneOne()
 		end,
 		error = function(html, status)
+			if nToken ~= D.nSearchToken then
+				return
+			end
 			--[[#DEBUG BEGIN]]
 			X.OutputDebugMessage(_L[MODULE_NAME], 'ERROR Fetch list: ' .. X.EncodeLUAData(status) .. '\n' .. (X.ConvertToANSI(html) or ''), X.DEBUG_LEVEL.WARNING)
 			--[[#DEBUG END]]
 			X.OutputAnnounceMessage(_L['Fetch repo meta list failed.'])
-			ui:Fetch('WndTable_List'):DataSource({})
+			aAllList = {}
+			fnDoneOne()
 		end,
 	})
+
+	-- 2) 精准匹配（不在排行榜也能查）
+	if not X.IsEmpty(szSearch) then
+		nPending = nPending + 1
+		X.Ajax({
+			url = MY_RSS.PULL_BASE_URL .. '/api/addon/common-monitor/subscribe/feed',
+			data = {
+				l = X.ENVIRONMENT.GAME_LANG,
+				L = X.ENVIRONMENT.GAME_EDITION,
+				T = 3,
+				key = szSearch,
+			},
+			success = function(szHTML)
+				if nToken ~= D.nSearchToken then
+					return
+				end
+				local res = X.DecodeJSON(szHTML)
+				-- 不存在：{"code":404,"msg":"数据不存在"}
+				if X.IsTable(res) and res.id then
+					tFeedRecord = fnToRecord(res)
+				else
+					tFeedRecord = nil
+				end
+				fnDoneOne()
+			end,
+			error = function(szHtml, szStatus)
+				if nToken ~= D.nSearchToken then
+					return
+				end
+				tFeedRecord = nil
+				fnDoneOne()
+			end,
+		})
+	end
+
+	fnFinalize()
 end
 
 function D.OnItemLButtonClick()
