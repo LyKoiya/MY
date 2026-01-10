@@ -227,7 +227,8 @@ local szHeader1 = GetFormatText(_L.PLUGIN_NAME .. ' ' .. _L['[Author]'], 8, 89, 
 local szHeader2 = GetFormatText(_L['[Fake author]'], 8, 255, 95, 159)
 local szNameCN1 = string.char(0xDC, 0xF8, 0xD2, 0xC1)
 local szNameCN2 = string.char(0xDC, 0xF8, 0xD2, 0xC1, 0xD2, 0xC1)
-local szNameCN3 = string.char(0xDC, 0xF8, 0xD2, 0xC1, 0x40, 0xB0, 0xD7, 0xB5, 0xDB, 0xB3, 0xC7)
+local szNameCN3 = string.char(0xD2, 0xC1, 0xDC, 0xF8)
+local szNameCN4 = string.char(0xD2, 0xC1, 0xDC, 0xF8, 0xDC, 0xF8)
 local szNameTW1 = string.char(0xE8, 0x8C, 0x97, 0xE4, 0xBC, 0x8A)
 local szNameTW2 = string.char(0xE8, 0x8C, 0x97, 0xE4, 0xBC, 0x8A, 0xE4, 0xBC, 0x8A)
 
@@ -241,63 +242,112 @@ X.PACKET_INFO.AUTHOR_ROLE_LIST    = {
 	-- { szGlobalID = '0', szHeader = '' },
 	-- { szName = '', dwID = 0, szHeader = '' },
 	-- { szName = '', dwID = 0, szGlobalID = '0', szHeader = '' },
-	{ dwID =  3007396, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 梦江南
-	{ dwID = 28564812, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 梦江南
-	{ dwID =  1600498, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 追风蹑影
-	{ dwID =  4664780, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 日月明尊
-	{ dwID = 17796954, szName = szNameCN3, szHeader = szHeader1 }, -- 茗伊@白帝城 梦江南
-	{ dwID =      601, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 有人赴约
-	{ dwID =     2202, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 有人赴约
-	{ dwID =      690, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 山海相逢
-	{ dwID =     1848, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 山海相逢
-	{ dwID =      417, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 自当狂
-	{ dwID =      974, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 自当狂
-	{ dwID =       43, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 万象长安
-	{ dwID =      125, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 万象长安
-	{ dwID =     3848, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 眉间雪
-	{ dwID =     6060, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 眉间雪
-	{ dwID =      350, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 九万里
-	{ dwID =      518, szName = szNameCN2, szHeader = szHeader1 }, -- 茗伊伊 九万里
-	{ dwID =   385183, szName = szNameTW1, szHeader = szHeader1 }, -- 茗伊1@隱世 傲血戰意
-	{ dwID =  8568269, szName = szNameTW1, szHeader = szHeader1 }, -- 茗伊 傲血戰意
-	{ dwID =  1452025, szName = szNameTW2, szHeader = szHeader1 }, -- 茗伊伊 巔峰再起
-	{ dwID =     1028, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 缘起稻香@缘起一区
-	{ dwID =      660, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 梦回长安@缘起一区
-	{ dwID =      280, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 烟雨扬州@缘起一区
-	{ dwID =      143, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 神都洛阳@缘起一区
-	{ dwID =     1259, szName = szNameCN1, szHeader = szHeader1 }, -- 茗伊 天宝盛世@缘起一区
-	{ szGlobalID = '4647714815446365644', szHeader = szHeader1 }, -- 乾坤一掷 茗伊
-	{ szGlobalID = '4647714815446365650', szHeader = szHeader1 }, -- 乾坤一掷 茗伊伊
-	{ szGlobalID = '2900318160027211566', szHeader = szHeader1 }, -- 唯我独尊 茗伊
-	{ szGlobalID = '342273571684493800' , szHeader = szHeader1 }, -- 唯我独尊 茗伊伊
-	{ szGlobalID = '2990390152574185432', szHeader = szHeader1 }, -- 天鹅坪 茗伊
-	{ szGlobalID = '252201579145213206' , szHeader = szHeader1 }, -- 天鹅坪 茗伊伊
-	{ szGlobalID = '3945153273576625046', szHeader = szHeader1 }, -- 幽月轮 茗伊
-	{ szGlobalID = '3945153273576625053', szHeader = szHeader1 }, -- 幽月轮 茗伊伊
-	{ szGlobalID = '4431542033332598576', szHeader = szHeader1 }, -- 斗转星移 茗伊
-	{ szGlobalID = '270215977662693730' , szHeader = szHeader1 }, -- 斗转星移 茗伊伊
-	{ szGlobalID = '432345564230575012' , szHeader = szHeader1 }, -- 梦江南 茗伊
-	{ szGlobalID = '432345564256132428' , szHeader = szHeader1 }, -- 梦江南 茗伊伊
-	{ szGlobalID = '288230376168682411' , szHeader = szHeader1 }, -- 破阵子 茗伊
-	{ szGlobalID = '288230376154983398' , szHeader = szHeader1 }, -- 破阵子 茗伊伊
-	{ szGlobalID = '810647932948971397' , szHeader = szHeader1 }, -- 绝代天骄 茗伊
-	{ szGlobalID = '810647932954621200' , szHeader = szHeader1 }, -- 绝代天骄 茗伊伊
-	{ szGlobalID = '216172782136999278' , szHeader = szHeader1 }, -- 蝶恋花 茗伊
-	{ szGlobalID = '216172782126564848' , szHeader = szHeader1 }, -- 蝶恋花 茗伊伊
-	{ szGlobalID = '396316767212724712' , szHeader = szHeader1 }, -- 长安城 茗伊
-	{ szGlobalID = '396316767221969620' , szHeader = szHeader1 }, -- 长安城 茗伊伊
-	{ szGlobalID = '3963167672086075586', szHeader = szHeader1 }, -- 青梅煮酒 茗伊
-	{ szGlobalID = '3728980491462810295', szHeader = szHeader1 }, -- 青梅煮酒 茗伊伊
-	{ szGlobalID = '234187180631190792' , szHeader = szHeader1 }, -- 飞龙在天 茗伊
-	{ szGlobalID = '234187180639172085' , szHeader = szHeader1 }, -- 飞龙在天 茗伊伊
-	{ szGlobalID = '378302368729578857' , szHeader = szHeader1 }, -- 龙争虎斗 茗伊
-	{ szGlobalID = '378302368704986888' , szHeader = szHeader1 }, -- 龙争虎斗 茗伊伊
-	{ szGlobalID = '972777519522485610' , szHeader = szHeader1 }, -- 剑胆琴心 茗伊
-	{ szGlobalID = '972777519512290625' , szHeader = szHeader1 }, -- 剑胆琴心 茗伊伊
-	{ szName = szNameCN1, dwID = '*', szHeader = szHeader2 }, -- 简体 茗伊
-	{ szName = szNameCN2, dwID = '*', szHeader = szHeader2 }, -- 简体 茗伊伊
-	{ szName = szNameTW1, dwID = '*', szHeader = szHeader2 }, -- 繁体 茗伊
-	{ szName = szNameTW2, dwID = '*', szHeader = szHeader2 }, -- 繁体 茗伊伊
+	-- 眉间雪
+	{ szGlobalID = '4917930793088585480', dwID =     3848, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '4917930793088587692', dwID =     6060, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '4917930793091799002', dwID =  3217370, szName = szNameCN4, szHeader = szHeader1 },
+	{ szGlobalID = '4845873199050654297', dwID =  3753904, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4845873199050655898', dwID =  3755505, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '4953959590107545980', dwID =  5381616, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4953959590107546219', dwID =  5381855, szName = szNameCN2, szHeader = szHeader1 },
+	-- 山海相逢
+	{ szGlobalID = '4863887597560136370', dwID =      690, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '4863887597560137528', dwID =     1848, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '4881901996069618081', dwID =  1613070, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4881901996069618638', dwID =  1613627, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '4899916394579099691', dwID =  2335833, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4899916394579099773', dwID =  2335915, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '4935945191598063966', dwID =  3254257, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4935945191598064134', dwID =  3254425, szName = szNameCN2, szHeader = szHeader1 },
+	-- 龙争虎斗
+	{ szGlobalID = '378302368703873127' , dwID =  4751463, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '378302368704986888' , dwID =  5865224, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '378302368705443010' , dwID =  6321346, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '378302368705443033' , dwID =  6321369, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '378302368705443039' , dwID =  6321375, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '378302368729578857' , dwID = 30457193, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '378302368731640013' , dwID = 32518349, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '378302368732635380' , dwID = 33513716, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '378302368732910188' , dwID = 33788524, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '378302368733692724' , dwID = 34571060, szName = szNameCN1, szHeader = szHeader1 },
+	-- 剑胆琴心
+	{ szGlobalID = '972777519512290625' , dwID =   263489, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '972777519522485610' , dwID = 10458474, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	-- 斗转星移
+	{ szGlobalID = '270215977646574895' , dwID =  4345135, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '270215977662693730' , dwID = 20463970, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '4431542033332598576', dwID = 20501066, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '4431542033332788264', dwID = 20690754, szName = szNameCN2, szHeader = szHeader1 },
+	-- 乾坤一掷
+	{ szGlobalID = '306244774665193949' , dwID =  4000221, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '306244774678344906' , dwID = 17151178, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '4647714815446365644', dwID = 22028859, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '4647714815446365650', dwID = 22028865, szName = szNameCN2, szHeader = szHeader1 },
+	-- 绝代天骄
+	{ szGlobalID = '810647932928415242' , dwID =  1725962, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932929761745' , dwID =  3072465, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '810647932929767343' , dwID =  3078063, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932930507327' , dwID =  3818047, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '162129586587094825' , dwID = 14533895, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932948616306' , dwID = 21927026, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932948971397' , dwID = 22282117, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932954659351' , dwID = 27970071, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '810647932954621200' , dwID = 27931920, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	-- 梦江南
+	{ szGlobalID = '432345564230575012' , dwID =  3007396, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '432345564256132428' , dwID = 28564812, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '342273571692775163' , dwID = 17796954, szName = szNameCN1, szHeader = szHeader1 },
+	-- 幽月轮
+	{ szGlobalID = '198158383608689108' , dwID =  4387284, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '198158383625370506' , dwID = 21068682, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '3945153273576625046', dwID = 21553085, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '3945153273576625053', dwID = 21553092, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	-- 长安城
+	{ szGlobalID = '396316767212724712' , dwID =  4121064, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '396316767217116975' , dwID =  8513327, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '396316767221932296' , dwID = 13328648, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '396316767221932356' , dwID = 13328708, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '396316767221969620' , dwID = 13365972, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	-- 唯我独尊
+	{ szGlobalID = '342273571684493800' , dwID =  4336104, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '2900318160027211566', dwID = 20870772, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	-- 蝶恋花
+	{ szGlobalID = '216172782116345142' , dwID =  2561334, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782116778584' , dwID =  2994776, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782124917034' , dwID = 11133226, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782124970802' , dwID = 11186994, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '216172782126564848' , dwID = 12781040, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '216172782126564851' , dwID = 12781043, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782135452209' , dwID = 21668401, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782136639174' , dwID = 22855366, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '216172782136822717' , dwID = 23038909, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '216172782136999278' , dwID = 23215470, szName = szNameCN1, szHeader = szHeader1 },
+	-- 天鹅坪
+	{ szGlobalID = '252201579136182161' , dwID =  3434385, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '252201579136967752' , dwID =  4219976, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '252201579145213206' , dwID = 12465430, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '2990390152574185432', dwID = 14964280, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '252201579154915656' , dwID = 22167880, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	-- 破阵子
+	{ szGlobalID = '288230376154983398' , dwID =  3271654, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '288230376168682411' , dwID = 16970667, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	-- 飞龙在天
+	{ szGlobalID = '234187180625901428' , dwID =  2635636, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '234187180631190792' , dwID =  7925000, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '234187180639172085' , dwID = 15906293, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '234187180639782941' , dwID = 16517149, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '234187180639916246' , dwID = 16650454, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '3710966092953340963', dwID = 22075830, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '3728980491462810295', dwID = 23598477, szName = szNameCN2, szHeader = szHeader1 },
+	{ szGlobalID = '3710966092956267991', dwID = 25002858, szName = szNameCN2, szHeader = szHeader1 }, -- NameCN2
+	{ szGlobalID = '2882303761517969694', dwID = 25747825, szName = szNameCN1, szHeader = szHeader1 }, -- NameCN1
+	{ szGlobalID = '3855081281029320236', dwID = 26037104, szName = szNameCN1, szHeader = szHeader1 },
+	{ szGlobalID = '3963167672086075586', dwID = 27419106, szName = szNameCN1, szHeader = szHeader1 },
+	-- 通配
+	{ szName = szNameCN1, dwID = '*', szHeader = szHeader2 }, -- 简体
+	{ szName = szNameCN2, dwID = '*', szHeader = szHeader2 }, -- 简体
+	{ szName = szNameTW1, dwID = '*', szHeader = szHeader2 }, -- 繁体
+	{ szName = szNameTW2, dwID = '*', szHeader = szHeader2 }, -- 繁体
 }
 
 -- 导出命名空间
