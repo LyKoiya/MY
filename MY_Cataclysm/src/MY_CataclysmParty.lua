@@ -1037,8 +1037,9 @@ end
 function CTM:CallRefreshImages(dwID, ...)
 	if type(dwID) == 'number' then
 		local info = self:GetMemberInfo(dwID)
-		if info and CTM_CACHE[dwID] and CTM_CACHE[dwID]:IsValid() then
-			self:RefreshImages(CTM_CACHE[dwID], dwID, info, ...)
+		local handle = CTM_CACHE[dwID]
+		if info and handle and handle:IsValid() then
+			self:RefreshImages(handle, dwID, info, ...)
 		end
 	else
 		for k, v in pairs(CTM_CACHE) do
@@ -1888,8 +1889,9 @@ end
 function CTM:CallDrawHPMP(dwID, ...)
 	if type(dwID) == 'number' then
 		local info = self:GetMemberInfo(dwID)
-		if info and CTM_CACHE[dwID] and CTM_CACHE[dwID]:IsValid() then
-			self:DrawHPMP(CTM_CACHE[dwID], dwID, info, ...)
+		local handle = CTM_CACHE[dwID]
+		if info and handle and handle:IsValid() then
+			self:DrawHPMP(handle, dwID, info, ...)
 		end
 	else
 		for k, v in pairs(CTM_CACHE) do
@@ -2171,19 +2173,25 @@ function CTM:RefreshSputtering()
 				tCount[dwID] = nCount
 			end
 			for _, dwID in pairs(tGroupInfo.MemberList) do
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering'):SetVisible(tCount[dwID] == nMaxCount)
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering/Text_Sputtering'):SetAlpha(CFG.nSputteringFontAlpha)
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering/Text_Sputtering'):SetText(nMaxCount)
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering/Text_Sputtering'):SetFontColor(unpack(CFG.tSputteringFontColor))
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering/Shadow_Sputtering'):SetAlpha(CFG.nSputteringShadowAlpha)
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering/Shadow_Sputtering'):SetColorRGB(unpack(CFG.tSputteringShadowColor))
+				local handle = CTM_CACHE[dwID]
+				if handle and handle:IsValid() then
+					handle:Lookup('Handle_Sputtering'):SetVisible(tCount[dwID] == nMaxCount)
+					handle:Lookup('Handle_Sputtering/Text_Sputtering'):SetAlpha(CFG.nSputteringFontAlpha)
+					handle:Lookup('Handle_Sputtering/Text_Sputtering'):SetText(nMaxCount)
+					handle:Lookup('Handle_Sputtering/Text_Sputtering'):SetFontColor(unpack(CFG.tSputteringFontColor))
+					handle:Lookup('Handle_Sputtering/Shadow_Sputtering'):SetAlpha(CFG.nSputteringShadowAlpha)
+					handle:Lookup('Handle_Sputtering/Shadow_Sputtering'):SetColorRGB(unpack(CFG.tSputteringShadowColor))
+				end
 			end
 		end
 	else
 		for nGroup = 0, team.nGroupNum - 1 do
 			local tGroupInfo = team.GetGroupInfo(nGroup)
 			for _, dwID in pairs(tGroupInfo.MemberList) do
-				CTM_CACHE[dwID]:Lookup('Handle_Sputtering'):Hide()
+				local handle = CTM_CACHE[dwID]
+				if handle and handle:IsValid() then
+					handle:Lookup('Handle_Sputtering'):Hide()
+				end
 			end
 		end
 	end
@@ -2258,20 +2266,20 @@ function CTM:ChangeTeamVoteState(eType, dwID, status)
 	if not opt then
 		return
 	end
-	if CTM_CACHE[dwID] and CTM_CACHE[dwID]:IsValid() then
-		local h = CTM_CACHE[dwID]
-		h:Lookup(opt.awaitPath):Hide()
+	local handle = CTM_CACHE[dwID]
+	if handle and handle:IsValid() then
+		handle:Lookup(opt.awaitPath):Hide()
 		if status == 'resolve' and opt.resolvePath then
 			local key = 'MY_CATACLYSM_READY_' .. eType .. '_' .. dwID
-			local hResolve = h:Lookup(opt.resolvePath)
+			local hResolve = handle:Lookup(opt.resolvePath)
 			hResolve:Show()
 			hResolve:SetAlpha(240)
 			X.BreatheCall(key, function()
-				if not X.IsElement(h) then
+				if not X.IsElement(handle) then
 					X.BreatheCall(key, false)
 					return
 				end
-				local hResolve = h:Lookup(opt.resolvePath)
+				local hResolve = handle:Lookup(opt.resolvePath)
 				if not X.IsElement(hResolve) then
 					X.BreatheCall(key, false)
 					return
@@ -2283,7 +2291,7 @@ function CTM:ChangeTeamVoteState(eType, dwID, status)
 				end
 			end)
 		elseif status == 'reject' then
-			h:Lookup(opt.rejectPath):Show()
+			handle:Lookup(opt.rejectPath):Show()
 		end
 	end
 end
@@ -2317,8 +2325,9 @@ function CTM:CallEffect(dwTargetID, nDelay)
 end
 
 local function GetMemberHandle(dwID)
-	if CTM_CACHE[dwID] and CTM_CACHE[dwID]:IsValid() then
-		return CTM_CACHE[dwID]
+	local handle = CTM_CACHE[dwID]
+	if handle and handle:IsValid() then
+		return handle
 	end
 end
 
