@@ -191,6 +191,7 @@ function D.Search(page, nPage)
 				l = X.ENVIRONMENT.GAME_LANG,
 				L = X.ENVIRONMENT.GAME_EDITION,
 				T = 3,
+				map = dwMapID,
 				key = szSearch,
 			},
 			success = function(szHTML)
