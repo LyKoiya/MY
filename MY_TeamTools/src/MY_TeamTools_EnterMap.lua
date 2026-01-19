@@ -56,7 +56,7 @@ X.RegisterBgMsg('MY_ENTER_MAP', function(_, aData, nChannel, dwTalkerID, szTalke
 			tInfoCache[dwTalkerID] = {
 				szName = me.szName,
 				dwForceID = me.dwForceID,
-				dwMountKungfuID = UI_GetPlayerMountKungfuID(),
+				dwKungfuID = UI_GetPlayerMountKungfuID(),
 			}
 		else
 			local team = GetClientTeam()
@@ -65,7 +65,7 @@ X.RegisterBgMsg('MY_ENTER_MAP', function(_, aData, nChannel, dwTalkerID, szTalke
 				tInfoCache[dwTalkerID] = {
 					szName = info.szName,
 					dwForceID = info.dwForceID,
-					dwMountKungfuID = info.dwActualKungfuID,
+					dwKungfuID = info.dwActualKungfuID,
 				}
 			end
 		end

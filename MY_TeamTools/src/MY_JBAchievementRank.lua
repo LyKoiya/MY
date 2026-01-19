@@ -209,9 +209,10 @@ function D.UpdateMapBossAchieveAcquire()
 	BOSS_ACHIEVE_ACQUIRE_STATE = tBossAchieveAcquireState
 end
 X.RegisterEvent('MY_RSS_UPDATE', 'MY_JBAchievementRank', function()
-	if not arg0 or arg0 == 'achievement-rank' then
-		D.UpdateMapBossAchieveAcquire()
+	if arg0 and arg0 ~= 'achievement-rank' then
+		return
 	end
+	D.UpdateMapBossAchieveAcquire()
 end)
 X.RegisterEvent('LOADING_ENDING', 'MY_JBAchievementRank', D.UpdateMapBossAchieveAcquire)
 
