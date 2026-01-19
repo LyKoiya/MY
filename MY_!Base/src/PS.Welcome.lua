@@ -325,6 +325,65 @@ function PS.OnPanelActive(wnd)
 			return menu
 		end,
 	}):AutoWidth():Width() + 5
+	function D.fnDrawRSS()
+		local tRSS = MY_RSS.Get('MP')
+		if tRSS and X.IsString(tRSS.t) then
+			local function FormatSQS(s)
+				local SQS = X.EncodeQuerystring(X.SignPostData(X.ConvertToUTF8(
+					{
+						l = X.ENVIRONMENT.GAME_LANG,
+						L = X.ENVIRONMENT.GAME_EDITION,
+						S = X.GetRegionOriginName(),
+						s = X.GetServerOriginName(),
+						n = X.GetClientPlayerInfo().szName,
+					}),
+					X.SECRET['J3CX::SHARE_MSG']
+				))
+				return X.StringReplaceW(s, '{$SQS}', SQS)
+			end
+			local szText = tRSS.t
+			local szPath = X.IsString(tRSS.u) and tRSS.u or nil
+			local szMode = X.IsString(tRSS.m) and tRSS.m or nil
+			local function CreateMenu(menu, data)
+				for _, v in ipairs(data) do
+					if X.IsTable(v) and X.IsString(v.t) then
+						local m = {
+							szOption = v.t,
+							fnAction = function()
+								if not X.IsString(v.u) then
+									return
+								end
+								X.OpenBrowser(FormatSQS(v.u), v.m)
+								X.UI.ClosePopupMenu()
+							end,
+						}
+						if v.c then
+							m.r, m.g, m.b = X.HumanColor2RGB(v.c)
+						end
+						if X.IsTable(v.s) then
+							m = CreateMenu(m, v.s)
+						end
+						table.insert(menu, m)
+					end
+				end
+				return menu
+			end
+			local menu = CreateMenu({}, tRSS.s)
+			x = x + ui:Append('WndButton', {
+				x = x, h = 30,
+				name = 'WndButton_RSS',
+				text = szText,
+				menu = #menu > 0 and menu or nil,
+				onClick = #menu == 0
+					and function()
+						X.OpenBrowser(FormatSQS(szPath), szMode)
+					end
+					or nil,
+			}):AutoWidth():Width() + 5
+			PS.OnPanelResize(wnd)
+			D.fnDrawRSS = nil
+		end
+	end
 	PS.OnPanelResize(wnd)
 end
 
@@ -355,6 +414,7 @@ function PS.OnPanelResize(wnd)
 	ui:Fetch('WndButton_SerendipitySearch'):Top(fScaleH + 65)
 	ui:Fetch('WndButton_UserPreference'):Top(fScaleH + 65)
 	ui:Fetch('WndButton_AddonErrorMessage'):Top(fScaleH + 65)
+	ui:Fetch('WndButton_RSS'):Top(fScaleH + 65)
 end
 
 function PS.OnPanelBreathe(wnd)
@@ -364,6 +424,17 @@ function PS.OnPanelBreathe(wnd)
 	ui:Fetch('Text_Memory'):Text(GetMemoryText())
 end
 
+function PS.OnPanelDeactivate()
+	D.fnDrawRSS = nil
+end
+
 X.Panel.Register(nil, 'Welcome', _L['Welcome'], '', PS)
+
+X.RegisterEvent('MY_RSS_UPDATE', 'PS_Welcome_RSS_Update', function()
+	if arg0 and arg0 ~= 'MP' then
+		return
+	end
+	X.SafeCall(D.fnDrawRSS)
+end)
 
 --[[#DEBUG BEGIN]]X.ReportModuleLoading(MODULE_PATH, 'FINISH')--[[#DEBUG END]]
