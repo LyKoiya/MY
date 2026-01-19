@@ -162,8 +162,8 @@ local function OnDeath(dwID, dwKiller)
 				INFO_CACHE[dwID] = {
 					szName = me.szName,
 					dwForceID = me.dwForceID,
-					dwMountKungfuID = UI_GetPlayerMountKungfuID(),
-					dwActualMountKungfuID = UI_GetPlayerMountKungfuID(),
+					dwKungfuID = UI_GetPlayerMountKungfuID(),
+					dwActualKungfuID = UI_GetPlayerMountKungfuID(),
 				}
 			else
 				local team = GetClientTeam()
@@ -172,8 +172,8 @@ local function OnDeath(dwID, dwKiller)
 					INFO_CACHE[dwID] = {
 						szName = info.szName,
 						dwForceID = info.dwForceID,
-						dwMountKungfuID = info.dwActualKungfuID,
-						dwActualMountKungfuID = info.dwActualKungfuID,
+						dwKungfuID = info.dwActualKungfuID,
+						dwActualKungfuID = info.dwActualKungfuID,
 					}
 				end
 			end
