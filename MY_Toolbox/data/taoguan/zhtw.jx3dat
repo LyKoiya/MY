@@ -10,5 +10,6 @@ return {
 		{ szName = "梅良玉簽", bFilter = false }, -- X.GetItemInfoName(5, 6038)
 		{ szName = "小銀錘", bFilter = false }, -- X.GetItemInfoName(5, 6058)
 		{ szName = "小金錘", bFilter = false }, -- X.GetItemInfoName(5, 6060)
-		{ szName = "年獸陶罐", bFilter = false }, -- X.GetItemInfoName(5, 20959)	},
+		{ szName = "年獸陶罐", bFilter = false }, -- X.GetItemInfoName(5, 20959)	
+	},
 }
