@@ -63,6 +63,9 @@ local CTM_PLAYER_SKILL_CD    = {} -- 队友招式调息状态显示
 local CTM_TEMP_TARGET_TYPE, CTM_TEMP_TARGET_ID
 local CHANGGE_REAL_SHADOW_TPLID = 46140 -- 清绝歌影 的主体影子
 local CHANGGE_REAL_SHADOW_CACHE = {}
+local BUFF_GROUP_RIDE_DRIVER = 30098 --多人坐骑主驾Buff
+local BUFF_GROUP_RIDE_PASSENGER = 30099 --多人坐骑副驾Buff
+
 do
 local function onNpcEnterScene()
 	local me = X.GetClientPlayer()
@@ -1224,6 +1227,7 @@ function CTM:RefreshImages(h, dwID, info, tSetting, bIcon, bFormationLeader, bLa
 			hBoxes:SetAbsPos(hMana:GetAbsX() - 1, hMana:GetAbsY() - hBoxes:GetH() + hMana:GetH() / 2)
 		end
 	end
+	self:UpdateMemberGroupRide(h)
 end
 
 function CTM:DrawAllParty()
@@ -1269,6 +1273,7 @@ function CTM:ReloadParty()
 	self:RefreshDistance()
 	self:RefreshFormation()
 	self:RefreshPlayerSkillCD()
+	self:UpdateGroupRide()
 	CTM_LIFE_CACHE = {}
 end
 
@@ -1330,6 +1335,7 @@ function CTM:DrawParty(nIndex)
 	self:RefreshTarget(dwID, dwType, dwID, dwType)
 	self:RefreshTTarget()
 	self:RefreshPlayerSkillCD()
+	self:UpdateGroupRide()
 end
 
 function CTM:Scale(fX, fY, frame)
@@ -2321,6 +2327,77 @@ function CTM:CallEffect(dwTargetID, nDelay)
 			end
 		end)
 		CTM_CACHE[dwTargetID]:Lookup('Image_Effect'):Show()
+	end
+end
+
+local function GetRideState(hPlayer)
+    if not hPlayer then
+        return
+    end
+
+    local tBuff = MY_GetBuff(hPlayer, BUFF_GROUP_RIDE_DRIVER, 1)
+    if tBuff then
+        return { bDriver = true, dwDriverID = hPlayer.dwID }
+    end
+
+    tBuff = MY_GetBuff(hPlayer, BUFF_GROUP_RIDE_PASSENGER, 1)
+    if tBuff then
+        return { bPassenger = true, dwDriverID = tBuff.dwSkillSrcID }
+    end
+end
+
+function CTM:UpdateMemberGroupRide(hMember)
+    if not hMember then
+        return
+    end
+
+    local dwPlayerID              = hMember.dwID
+    local hPlayer                 = X.GetPlayer(dwPlayerID)
+    local hGroup                  = hMember:Lookup("Handle_Group")
+    local hImgInvincible          = hGroup:Lookup("Image_Invincible")
+    local hImgGroupDriver         = hGroup:Lookup("Image_GroupDriver")
+    local hImgGroupPassenger      = hGroup:Lookup("Image_GroupPassenger")
+    local hImgGroupOtherDriver    = hGroup:Lookup("Image_OtherDriver")
+    local hImgGroupOtherPassenger = hGroup:Lookup("Image_OtherPassenger")
+
+    if hPlayer and hGroup then
+        local tTargetState = GetRideState(hPlayer)
+        if tTargetState then
+            local hClientPlayer = GetClientPlayer()
+            local tMyState      = GetRideState(hClientPlayer)
+            local bSameVehicle  = false
+            if tMyState and tTargetState.dwDriverID == tMyState.dwDriverID then
+                bSameVehicle = true
+            end
+
+            hGroup:Show()
+            hImgInvincible:Show(tTargetState.bPassenger)
+            hImgGroupDriver:Show(tTargetState.bDriver and bSameVehicle)
+            hImgGroupOtherDriver:Show(tTargetState.bDriver and not bSameVehicle)
+            hImgGroupPassenger:Show(tTargetState.bPassenger and bSameVehicle)
+            hImgGroupOtherPassenger:Show(tTargetState.bPassenger and not bSameVehicle)
+        else
+            hGroup:Hide()
+        end
+    elseif hGroup then
+        hGroup:Hide()
+    end
+
+    local fScale = (CFG.fScaleY + CFG.fScaleX) / 2
+    if fScale == 0 then
+        fScale = 1
+    end
+    hImgGroupDriver:SetSize(20 * fScale, 22 * fScale)
+    hImgGroupOtherDriver:SetSize(20 * fScale, 22 * fScale)
+    hImgGroupPassenger:SetSize(16 * fScale, 22 * fScale)
+    hImgGroupOtherPassenger:SetSize(16 * fScale, 22 * fScale)
+end
+
+function CTM:UpdateGroupRide()
+	for k, v in pairs(CTM_CACHE) do
+		if v:IsValid() then
+			self:UpdateMemberGroupRide(v)
+		end
 	end
 end
 
