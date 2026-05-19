@@ -1054,6 +1054,35 @@ function CTM:CallRefreshImages(dwID, ...)
 	end
 end
 
+function CTM:RefreshLive(h, dwID, info)
+	if not info then
+		return
+	end
+	local hImageLive = h:Lookup('Image_Live')
+	local hImageBroadcast = h:Lookup('Image_Broadcast')
+	if hImageLive and hImageBroadcast then
+		local bStreamer = OBDungeon_IsPlayerStreamer(info.szGlobalID) or false
+		local bVoiceBroadcast = OBDungeon_IsPlayerVoiceBroadcast(dwID) or false
+		hImageLive:SetVisible(bStreamer and not bVoiceBroadcast)
+		hImageBroadcast:SetVisible(bStreamer and bVoiceBroadcast)
+	end
+end
+
+function CTM:RefreshLiveByMemberID(dwID)
+	local h = CTM_CACHE[dwID]
+	if h and h:IsValid() then
+		self:RefreshLive(h, dwID, self:GetMemberInfo(dwID))
+	end
+end
+
+function CTM:RefreshLiveAll()
+	for dwID, h in pairs(CTM_CACHE) do
+		if h:IsValid() then
+			self:RefreshLive(h, dwID, self:GetMemberInfo(dwID))
+		end
+	end
+end
+
 function CTM:KungFuSwitch(dwID)
 	local handle = CTM_CACHE[dwID]
 	if handle and handle:IsValid() then
@@ -1226,6 +1255,8 @@ function CTM:RefreshImages(h, dwID, info, tSetting, bIcon, bFormationLeader, bLa
 			hBoxes:SetRelPos(hMana:GetRelX() - 1, hMana:GetRelY() - hBoxes:GetH() + hMana:GetH() / 2)
 			hBoxes:SetAbsPos(hMana:GetAbsX() - 1, hMana:GetAbsY() - hBoxes:GetH() + hMana:GetH() / 2)
 		end
+		--Ë¢ÐÂÖ±²¥
+		self:RefreshLive(h, dwID, info)
 	end
 	self:UpdateMemberGroupRide(h)
 end
