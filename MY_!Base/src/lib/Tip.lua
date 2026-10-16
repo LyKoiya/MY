@@ -399,7 +399,8 @@ function X.OutputDoodadTemplateTip(Rect, dwTemplateID, szExtraXml)
 	end
 	-- 名字
 	table.insert(t, GetFormatText(szName .. '\n', 65))
-	table.insert(t, GetDoodadQuestTip(dwTemplateID))
+	local szTips = GetDoodadQuestTip(dwTemplateID)
+	table.insert(t, szTips)
 	-- 模版ID
 	table.insert(t, GetFormatText(FormatString(g_tStrings.TIP_TEMPLATE_ID, doodad.dwTemplateID), 101))
 	if IsCtrlKeyDown() then
@@ -510,7 +511,8 @@ function X.OutputDoodadTip(Rect, dwDoodadID, szExtraXml)
 	end
 	-- 任务信息
 	if GetDoodadQuestTip then
-		table.insert(t, GetDoodadQuestTip(doodad.dwTemplateID))
+		local szTips = GetDoodadQuestTip(doodad.dwTemplateID)
+		table.insert(t, szTips)
 	end
 	-- 自定义项
 	if szExtraXml then
